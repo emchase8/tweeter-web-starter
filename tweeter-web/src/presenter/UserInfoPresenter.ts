@@ -8,6 +8,13 @@ export interface UserInfoView extends View {
   setFolloweeCount: (followeeCount: number) => void;
   setFollowerCount: (followerCount: number) => void;
   setDisplayedUser: (user: User) => void;
+  navigate: (path: string) => void;
+  deleteMessage: (messageID: string) => void;
+  displayInfoMessage: (
+    message: string,
+    duration: number,
+    bootstrapClasses?: string | undefined,
+  ) => string;
 }
 
 export class UserInfoPresenter extends Presenter<UserInfoView> {

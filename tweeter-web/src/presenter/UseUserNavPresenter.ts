@@ -4,6 +4,7 @@ import { Presenter, View } from "./Presenter";
 
 export interface UseUserNavView extends View {
   setDisplayedUser: (user: User) => void;
+  navigate: (path: string) => void;
 }
 
 export class UseUserNavPresenter extends Presenter<UseUserNavView> {

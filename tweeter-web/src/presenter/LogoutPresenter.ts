@@ -4,6 +4,13 @@ import { Presenter, View } from "./Presenter";
 
 export interface LogoutView extends View {
   clearUserInfo: () => void;
+  navigate: (path: string) => void;
+  deleteMessage: (messageID: string) => void;
+  displayInfoMessage: (
+    message: string,
+    duration: number,
+    bootstrapClasses?: string | undefined,
+  ) => string;
 }
 
 export class LogoutPresenter extends Presenter<LogoutView> {

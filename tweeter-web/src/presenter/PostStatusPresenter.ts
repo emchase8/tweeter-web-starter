@@ -4,6 +4,12 @@ import { Presenter, View } from "./Presenter";
 
 export interface PostStatusView extends View {
   setPost: (post: string) => void;
+  deleteMessage: (messageID: string) => void;
+  displayInfoMessage: (
+    message: string,
+    duration: number,
+    bootstrapClasses?: string | undefined,
+  ) => string;
 }
 
 export class PostStatusPresenter extends Presenter<PostStatusView> {

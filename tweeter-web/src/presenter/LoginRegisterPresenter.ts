@@ -14,6 +14,7 @@ export interface LoginRegisterView extends View {
   setImageUrl: ((imageUrl: string) => void) | null;
   setImageBytes: ((imageBytes: Uint8Array) => void) | null;
   setImageFileExtension: ((imageFileExtension: string) => void) | null;
+  navigate: (path: string) => void;
 }
 
 export class LoginRegisterPresenter extends Presenter<LoginRegisterView> {

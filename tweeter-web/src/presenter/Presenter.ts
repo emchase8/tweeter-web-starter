@@ -1,12 +1,5 @@
 export interface View {
   displayErrorMessage: (message: string) => void;
-  navigate: (path: string) => void;
-  displayInfoMessage: (
-    message: string,
-    duration: number,
-    bootstrapClasses?: string | undefined,
-  ) => string;
-  deleteMessage: (messageID: string) => void;
 }
 
 export abstract class Presenter<V extends View> {

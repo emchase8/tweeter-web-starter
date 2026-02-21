@@ -6,11 +6,11 @@ import {
   UserInfoContext,
 } from "../userInfo/UserInfoContexts";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastActionsContext } from "../toaster/ToastContexts";
 import {
   PostItemPresenter,
   PostItemView,
 } from "../../presenter/PostItemPresnter";
+import { useMesssageActions } from "../toaster/MessageHooks";
 
 interface Props {
   status: Status;
@@ -20,11 +20,12 @@ const PostItem = (props: Props) => {
   const { displayedUser, authToken } = useContext(UserInfoContext);
   const { setDisplayedUser } = useContext(UserInfoActionsContext);
   const navigate = useNavigate();
-  const { displayToast } = useContext(ToastActionsContext);
+  const { displayErrorMessage } = useMesssageActions();
+
 
   const listener: PostItemView = {
     setDisplayedUser: setDisplayedUser,
-    displayToast: displayToast,
+    displayErrorMessage: displayErrorMessage,
     navigate: navigate,
   };
 
@@ -75,3 +76,5 @@ const PostItem = (props: Props) => {
 };
 
 export default PostItem;
+
+

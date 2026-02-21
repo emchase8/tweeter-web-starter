@@ -1,26 +1,18 @@
 import { AuthToken, User } from "tweeter-shared";
-import { ToastType } from "../components/toaster/Toast";
 import { UserService } from "../model.service/UserService";
+import { Presenter, View } from "./Presenter";
 
-export interface PostItemView {
+export interface PostItemView extends View {
   setDisplayedUser: (user: User) => void;
-  displayToast: (
-    toastType: ToastType,
-    message: string,
-    duration: number,
-    title?: string,
-    bootstrapClasses?: string,
-  ) => string;
   navigate: (path: string) => void;
 }
 
-export class PostItemPresenter {
+export class PostItemPresenter extends Presenter<PostItemView> {
   private _service: UserService;
-  private _view: PostItemView;
 
   public constructor(view: PostItemView) {
+    super(view);
     this._service = new UserService();
-    this._view = view;
   }
 
   public async navigateToUser(
@@ -28,7 +20,7 @@ export class PostItemPresenter {
     authToken: AuthToken,
     displayedUser: User,
   ): Promise<void> {
-    try {
+    this.doFailureReportingOperation(async () => {
       const alias = this._service.extractAlias(eventString);
 
       const toUser = await this._service.getUser(authToken!, alias);
@@ -39,12 +31,6 @@ export class PostItemPresenter {
           this._view.navigate(`/feed/${toUser.alias}`);
         }
       }
-    } catch (error) {
-      this._view.displayToast(
-        ToastType.Error,
-        `Failed to get user because of exception: ${error}`,
-        0,
-      );
-    }
+    }, "get user", () => {});
   }
 }

@@ -2,6 +2,15 @@ export interface View {
   displayErrorMessage: (message: string) => void;
 }
 
+export interface MessageView extends View {
+  deleteMessage: (messageID: string) => void;
+  displayInfoMessage: (
+    message: string,
+    duration: number,
+    bootstrapClasses?: string | undefined,
+  ) => string;
+}
+
 export abstract class Presenter<V extends View> {
   protected _view: V;
 

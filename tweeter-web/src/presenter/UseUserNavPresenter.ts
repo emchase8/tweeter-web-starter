@@ -22,7 +22,6 @@ export class UseUserNavPresenter extends Presenter<UseUserNavView> {
     await this.doFailureReportingOperation(
       async () => {
         const alias = this._service.extractAlias(eventString);
-        console.log(eventString);
 
         const toUser = await this._service.getUser(authToken!, alias);
 

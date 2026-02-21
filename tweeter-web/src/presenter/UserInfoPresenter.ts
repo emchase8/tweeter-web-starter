@@ -93,7 +93,6 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
   }
 
   public async followDisplayedUser(displayedUser: User, authToken: AuthToken) {
-    var followingUserToast = "";
     await this.doFailureReportingOperation(
       async () => {
         this.followUnfollow(
@@ -102,19 +101,6 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
           this._service.follow(authToken!, displayedUser!),
           true,
         );
-        // followingUserToast = this._view.displayInfoMessage(
-        //   `Following ${displayedUser!.name}...`,
-        //   0,
-        // );
-
-        // const [followerCount, followeeCount] = await this._service.follow(
-        //   authToken!,
-        //   displayedUser!,
-        // );
-
-        // this._view.setIsFollower(true);
-        // this._view.setFollowerCount(followerCount);
-        // this._view.setFolloweeCount(followeeCount);
       },
       "follow user",
       () => {
@@ -127,7 +113,6 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
     displayedUser: User,
     authToken: AuthToken,
   ) {
-    var unfollowingUserToast = "";
     await this.doFailureReportingOperation(
       async () => {
         this.followUnfollow(
@@ -136,19 +121,6 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
           this._service.unfollow(authToken!, displayedUser!),
           false,
         );
-        // unfollowingUserToast = this._view.displayInfoMessage(
-        //   `Unfollowing ${displayedUser!.name}...`,
-        //   0,
-        // );
-
-        // const [followerCount, followeeCount] = await this._service.unfollow(
-        //   authToken!,
-        //   displayedUser!,
-        // );
-
-        // this._view.setIsFollower(false);
-        // this._view.setFollowerCount(followerCount);
-        // this._view.setFolloweeCount(followeeCount);
       },
       "unfollow user",
       () => {

@@ -1,32 +1,27 @@
 import { User, AuthToken } from "tweeter-shared";
 import { UserService } from "../model.service/UserService";
 import { Buffer } from "buffer";
+import { Presenter, View } from "./Presenter";
 
-export interface LoginRegisterView {
+export interface LoginRegisterView extends View {
   updateUserInfo: (
     currentUser: User,
     displayedUser: User | null,
     authToken: AuthToken,
     remember: boolean,
   ) => void;
-  displayErrorMessage: (
-    message: string,
-    bootstrapClasses?: string | undefined,
-  ) => string;
   setIsLoading: (isLoading: boolean) => void;
   setImageUrl: ((imageUrl: string) => void) | null;
   setImageBytes: ((imageBytes: Uint8Array) => void) | null;
   setImageFileExtension: ((imageFileExtension: string) => void) | null;
-  navigate: (path: string) => void;
 }
 
-export class LoginRegisterPresenter {
+export class LoginRegisterPresenter extends Presenter<LoginRegisterView> {
   private _service: UserService;
-  private _view: LoginRegisterView;
 
   public constructor(view: LoginRegisterView) {
+    super(view);
     this._service = new UserService();
-    this._view = view;
   }
 
   public async doLogin(
@@ -35,25 +30,25 @@ export class LoginRegisterPresenter {
     rememberMe: boolean,
     originalUrl: string,
   ) {
-    try {
-      this._view.setIsLoading(true);
+    await this.doFailureReportingOperation(
+      async () => {
+        this._view.setIsLoading(true);
 
-      const [user, authToken] = await this._service.login(alias, password);
+        const [user, authToken] = await this._service.login(alias, password);
 
-      this._view.updateUserInfo(user, user, authToken, rememberMe);
+        this._view.updateUserInfo(user, user, authToken, rememberMe);
 
-      if (!!originalUrl) {
-        this._view.navigate(originalUrl);
-      } else {
-        this._view.navigate(`/feed/${user.alias}`);
-      }
-    } catch (error) {
-      this._view.displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`,
-      );
-    } finally {
-      this._view.setIsLoading(false);
-    }
+        if (!!originalUrl) {
+          this._view.navigate(originalUrl);
+        } else {
+          this._view.navigate(`/feed/${user.alias}`);
+        }
+      },
+      "log user in",
+      () => {
+        this._view.setIsLoading(false);
+      },
+    );
   }
 
   public async doRegister(
@@ -65,27 +60,27 @@ export class LoginRegisterPresenter {
     imageFileExtension: string,
     rememberMe: boolean,
   ) {
-    try {
-      this._view.setIsLoading(true);
+    await this.doFailureReportingOperation(
+      async () => {
+        this._view.setIsLoading(true);
 
-      const [user, authToken] = await this._service.register(
-        firstName,
-        lastName,
-        alias,
-        password,
-        imageBytes,
-        imageFileExtension,
-      );
+        const [user, authToken] = await this._service.register(
+          firstName,
+          lastName,
+          alias,
+          password,
+          imageBytes,
+          imageFileExtension,
+        );
 
-      this._view.updateUserInfo(user, user, authToken, rememberMe);
-      this._view.navigate(`/feed/${user.alias}`);
-    } catch (error) {
-      this._view.displayErrorMessage(
-        `Failed to register user because of exception: ${error}`,
-      );
-    } finally {
-      this._view.setIsLoading(false);
-    }
+        this._view.updateUserInfo(user, user, authToken, rememberMe);
+        this._view.navigate(`/feed/${user.alias}`);
+      },
+      "register user",
+      () => {
+        this._view.setIsLoading(false);
+      },
+    );
   }
 
   public handleImageFile(file: File | undefined) {

@@ -25,6 +25,21 @@ export class LoginRegisterPresenter extends Presenter<LoginRegisterView> {
     this._service = new UserService();
   }
 
+  private async setUser(
+    beSet: Promise<[User, AuthToken]>,
+    rememberMe: boolean,
+    originalUrl: string,
+  ): Promise<void> {
+    this._view.setIsLoading(true);
+    const [user, authToken] = await beSet;
+    this._view.updateUserInfo(user, user, authToken, rememberMe);
+    if (!!originalUrl) {
+      this._view.navigate(originalUrl);
+    } else {
+      this._view.navigate(`/feed/${user.alias}`);
+    }
+  }
+
   public async doLogin(
     alias: string,
     password: string,
@@ -33,17 +48,11 @@ export class LoginRegisterPresenter extends Presenter<LoginRegisterView> {
   ) {
     await this.doFailureReportingOperation(
       async () => {
-        this._view.setIsLoading(true);
-
-        const [user, authToken] = await this._service.login(alias, password);
-
-        this._view.updateUserInfo(user, user, authToken, rememberMe);
-
-        if (!!originalUrl) {
-          this._view.navigate(originalUrl);
-        } else {
-          this._view.navigate(`/feed/${user.alias}`);
-        }
+        this.setUser(
+          this._service.login(alias, password),
+          rememberMe,
+          originalUrl,
+        );
       },
       "log user in",
       () => {
@@ -63,19 +72,30 @@ export class LoginRegisterPresenter extends Presenter<LoginRegisterView> {
   ) {
     await this.doFailureReportingOperation(
       async () => {
-        this._view.setIsLoading(true);
-
-        const [user, authToken] = await this._service.register(
-          firstName,
-          lastName,
-          alias,
-          password,
-          imageBytes,
-          imageFileExtension,
+        this.setUser(
+          this._service.register(
+            firstName,
+            lastName,
+            alias,
+            password,
+            imageBytes,
+            imageFileExtension,
+          ),
+          rememberMe,
+          "",
         );
 
-        this._view.updateUserInfo(user, user, authToken, rememberMe);
-        this._view.navigate(`/feed/${user.alias}`);
+        // const [user, authToken] = await this._service.register(
+        //   firstName,
+        //   lastName,
+        //   alias,
+        //   password,
+        //   imageBytes,
+        //   imageFileExtension,
+        // );
+
+        // this._view.updateUserInfo(user, user, authToken, rememberMe);
+        // this._view.navigate(`/feed/${user.alias}`);
       },
       "register user",
       () => {

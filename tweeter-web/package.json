@@ -54,7 +54,7 @@
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.0",
     "@testing-library/user-event": "^14.5.1",
-    "@types/jest": "^29.5.8",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.11.24",
     "@typestrong/ts-mockito": "^2.7.12",
     "@vitejs/plugin-react": "^4.2.1",
@@ -70,15 +70,15 @@
     "verbose": true,
     "testEnvironment": "jsdom",
     "moduleNameMapper": {
-        "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "testMatch": [
-        "<rootDir>/test/**/*.test.tsx",
-        "<rootDir>/test/**/*.test.ts"
+      "<rootDir>/test/**/*.test.tsx",
+      "<rootDir>/test/**/*.test.ts"
     ],
     "transform": {
-        "^.+\\.tsx?$": "ts-jest",
-        "\\.js$": "babel-jest"
+      "^.+\\.tsx?$": "ts-jest",
+      "\\.js$": "babel-jest"
     }
-}
+  }
 }

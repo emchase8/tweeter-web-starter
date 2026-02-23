@@ -78,7 +78,6 @@ const ItemScroller = function <T, U extends Service>(props: Props<T, U>) {
             className="row mb-3 mx-0 px-0 border rounded bg-white"
           >
             {props.itemComponentGenerator(item, props.featureURL)}
-            {/* <UserItem user={item} featurePath={props.featureURL} /> */}
           </div>
         ))}
       </InfiniteScroll>

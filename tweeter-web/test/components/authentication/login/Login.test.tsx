@@ -44,10 +44,10 @@ describe("Login", () => {
   });
 
   it("presenter's login method is called with correct parameters when the sign-in button is pressed", async () => {
-    const ogURL = "http://imperial.navy"
+    const ogURL = "http://imperial.navy";
     const alias = "Grand Moff";
     const password = "Tarkin";
-    
+
     const mockPresenter = mock<LoginRegisterPresenter>();
     const mockPresenterInstance = instance(mockPresenter);
     const { user, signInButton, aliasField, passwordField } =

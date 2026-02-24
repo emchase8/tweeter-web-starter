@@ -84,18 +84,6 @@ export class LoginRegisterPresenter extends Presenter<LoginRegisterView> {
           rememberMe,
           "",
         );
-
-        // const [user, authToken] = await this._service.register(
-        //   firstName,
-        //   lastName,
-        //   alias,
-        //   password,
-        //   imageBytes,
-        //   imageFileExtension,
-        // );
-
-        // this._view.updateUserInfo(user, user, authToken, rememberMe);
-        // this._view.navigate(`/feed/${user.alias}`);
       },
       "register user",
       () => {

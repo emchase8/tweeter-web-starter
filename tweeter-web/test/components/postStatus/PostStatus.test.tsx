@@ -62,23 +62,22 @@ describe("Post Status", () => {
     const mockPresenter = mock<PostStatusPresenter>();
     const mockPresenterInstance = instance(mockPresenter);
     const post = "Kenobi!!!!!";
-    const { user, postButton, postField } =
-      renderPostStatusAndGetElements(mockPresenterInstance);
-    
+    const { user, postButton, postField } = renderPostStatusAndGetElements(
+      mockPresenterInstance,
+    );
+
     await user.type(postField, post);
     await user.click(postButton);
-    verify(mockPresenter.submitPost(mockUserInstance, mockAuthTokenInstance, post)).once();
+    verify(
+      mockPresenter.submitPost(mockUserInstance, mockAuthTokenInstance, post),
+    ).once();
   });
 });
 
 function renderPostStatus(presenter?: PostStatusPresenter) {
   return render(
     <MemoryRouter>
-      {!!presenter ? (
-        <PostStatus presenter={presenter} />
-      ) : (
-        <PostStatus />
-      )}
+      {!!presenter ? <PostStatus presenter={presenter} /> : <PostStatus />}
     </MemoryRouter>,
   );
 }

@@ -31,7 +31,9 @@ describe("PostStatusPresenter", () => {
 
   beforeEach(() => {
     mockPostStatusView = mock<PostStatusView>();
-    when(mockPostStatusView.displayInfoMessage(anything(), 0)).thenReturn("Nonsense");
+    when(mockPostStatusView.displayInfoMessage(anything(), 0)).thenReturn(
+      "Nonsense",
+    );
     mockPostStatusViewInstance = instance(mockPostStatusView);
 
     postStatusPresenterSpy = spy(
@@ -40,7 +42,7 @@ describe("PostStatusPresenter", () => {
     postStatusPresenterSpyInstance = instance(postStatusPresenterSpy);
 
     mockService = mock<StatusService>();
-    when(postStatusPresenterSpy.service).thenReturn(instance(mockService))
+    when(postStatusPresenterSpy.service).thenReturn(instance(mockService));
   });
 
   it("tells the view to display a posting status message", async () => {
@@ -64,7 +66,9 @@ describe("PostStatusPresenter", () => {
 
     verify(mockPostStatusView.deleteMessage("Nonsense")).once();
     verify(mockPostStatusView.setPost("")).once();
-    verify(mockPostStatusView.displayInfoMessage("Status posted!", 2000)).once();
+    verify(
+      mockPostStatusView.displayInfoMessage("Status posted!", 2000),
+    ).once();
     verify(mockPostStatusView.displayErrorMessage(anything())).never();
   });
 
@@ -72,7 +76,7 @@ describe("PostStatusPresenter", () => {
     let error = new Error("I have miscalculated");
     when(mockService.postStatus(anything(), anything())).thenThrow(error);
     await postStatusPresenterSpyInstance.submitPost(user, authToken, post);
-    
+
     verify(
       mockPostStatusView.displayErrorMessage(
         `Failed to post the status out because of exception: ${error.message}`,

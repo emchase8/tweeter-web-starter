@@ -71,7 +71,7 @@ describe("LogoutPresenter", () => {
     let error = new Error("its a trap");
     when(mockService.logout(anything())).thenThrow(error);
     await logoutPresenterSpyInstance.logOut(authToken);
-    
+
     verify(
       mockLogoutPresenterView.displayErrorMessage(
         `Failed to log user out because of exception: ${error.message}`,

@@ -31,16 +31,19 @@ describe("LogoutPresenter", () => {
       "deploy the garrison",
     );
     mockLogoutPresenterViewInstance = instance(mockLogoutPresenterView);
+
     logoutPresenterSpy = spy(
       new LogoutPresenter(mockLogoutPresenterViewInstance),
     );
     logoutPresenterSpyInstance = instance(logoutPresenterSpy);
+
     mockService = mock<UserService>();
     when(logoutPresenterSpy.service).thenReturn(instance(mockService));
   });
 
   it("tells the view to display a logging out message", async () => {
     await logoutPresenterSpyInstance.logOut(authToken);
+
     verify(
       mockLogoutPresenterView.displayInfoMessage("Logging Out...", 0),
     ).once();
@@ -48,13 +51,16 @@ describe("LogoutPresenter", () => {
 
   it("calls logout on the user service with the correct auth token", async () => {
     await logoutPresenterSpyInstance.logOut(authToken);
+
     verify(mockService.logout(authToken)).once();
+
     let [capturedAuthToken] = capture(mockService.logout).last();
     expect(capturedAuthToken).toEqual(authToken);
   });
 
   it("when logout successful, clear the info message that was displayed previously, clear the user info, and navigates to the login page", async () => {
     await logoutPresenterSpyInstance.logOut(authToken);
+
     verify(mockLogoutPresenterView.deleteMessage("deploy the garrison")).once();
     verify(mockLogoutPresenterView.clearUserInfo()).once();
     verify(mockLogoutPresenterView.navigate("/login")).once();
@@ -65,6 +71,7 @@ describe("LogoutPresenter", () => {
     let error = new Error("its a trap");
     when(mockService.logout(anything())).thenThrow(error);
     await logoutPresenterSpyInstance.logOut(authToken);
+    
     verify(
       mockLogoutPresenterView.displayErrorMessage(
         `Failed to log user out because of exception: ${error.message}`,

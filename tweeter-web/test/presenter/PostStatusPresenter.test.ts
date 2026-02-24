@@ -12,7 +12,7 @@ import {
   PostStatusView,
 } from "../../src/presenter/PostStatusPresenter";
 import { StatusService } from "../../src/model.service/StatusService";
-import { AuthToken, Status, User } from "tweeter-shared";
+import { AuthToken, User } from "tweeter-shared";
 
 describe("PostStatusPresenter", () => {
   let mockPostStatusView: PostStatusView;
@@ -33,16 +33,19 @@ describe("PostStatusPresenter", () => {
     mockPostStatusView = mock<PostStatusView>();
     when(mockPostStatusView.displayInfoMessage(anything(), 0)).thenReturn("Nonsense");
     mockPostStatusViewInstance = instance(mockPostStatusView);
+
     postStatusPresenterSpy = spy(
       new PostStatusPresenter(mockPostStatusViewInstance),
     );
     postStatusPresenterSpyInstance = instance(postStatusPresenterSpy);
+
     mockService = mock<StatusService>();
     when(postStatusPresenterSpy.service).thenReturn(instance(mockService))
   });
 
   it("tells the view to display a posting status message", async () => {
     await postStatusPresenterSpyInstance.submitPost(user, authToken, post);
+
     verify(
       mockPostStatusView.displayInfoMessage("Posting status...", 0),
     ).once();
@@ -50,6 +53,7 @@ describe("PostStatusPresenter", () => {
 
   it("calls postStatus on the post status service with the correct status string and auth token", async () => {
     await postStatusPresenterSpyInstance.submitPost(user, authToken, post);
+
     let [capturedAuth, capturedStatus] = capture(mockService.postStatus).last();
     expect(capturedAuth).toEqual(authToken);
     expect(capturedStatus.post).toBe("I like art");
@@ -57,6 +61,7 @@ describe("PostStatusPresenter", () => {
 
   it("When posting status successful, clear the info message that was displayed previously, clear the post, and display a status posted message", async () => {
     await postStatusPresenterSpyInstance.submitPost(user, authToken, post);
+
     verify(mockPostStatusView.deleteMessage("Nonsense")).once();
     verify(mockPostStatusView.setPost("")).once();
     verify(mockPostStatusView.displayInfoMessage("Status posted!", 2000)).once();
@@ -68,6 +73,7 @@ describe("PostStatusPresenter", () => {
     let error = new Error("I have miscalculated");
     when(mockService.postStatus(anything(), anything())).thenThrow(error);
     await postStatusPresenterSpyInstance.submitPost(user, authToken, post);
+    
     verify(
       mockPostStatusView.displayErrorMessage(
         `Failed to post the status out because of exception: ${error.message}`,

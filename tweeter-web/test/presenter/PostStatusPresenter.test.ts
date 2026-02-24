@@ -68,7 +68,6 @@ describe("PostStatusPresenter", () => {
     verify(mockPostStatusView.displayErrorMessage(anything())).never();
   });
 
-  //what does it mean by "clear the info message"? as far as I can tell, that only happens if the post was successful
   it("When posting status not successful, clear the info message and display an error message but does not tell it to clear the post or display a status posted message", async () => {
     let error = new Error("I have miscalculated");
     when(mockService.postStatus(anything(), anything())).thenThrow(error);
@@ -83,5 +82,6 @@ describe("PostStatusPresenter", () => {
     verify(
       mockPostStatusView.displayInfoMessage("Status posted!", 2000),
     ).never();
+    verify(mockPostStatusView.deleteMessage("Nonsense")).once();
   });
 });
